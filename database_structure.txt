@@ -1,0 +1,25 @@
+User
+- id (Primary Key)
+- username
+- email
+- password
+
+Product
+- id (Primary Key)
+- name
+- description
+- price
+- quantity
+
+Order
+- id (Primary Key)
+- user_id (Foreign Key)
+- status
+- total_price
+
+OrderItem
+- id (Primary Key)
+- order_id (Foreign Key)
+- product_id (Foreign Key)
+- quantity
+- price
