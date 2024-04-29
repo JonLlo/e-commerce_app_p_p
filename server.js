@@ -42,8 +42,8 @@ app.use(express.json());
 
 app.post('/register', async (req, res) => {
     // Extract username, email, and password from the request body
-    const { username, email, password } = req.body;
-    console.log(username, email, password, "camea")
+    const  {username, password, email}   = req.body;
+    console.log(username, "camea")
 
 });
 
