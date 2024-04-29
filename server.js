@@ -6,6 +6,9 @@ const port = 3000; // You can change this port number if needed
 app.get('/', (req, res) => {
     res.send('Welcome');
 });
+app.get('/dog', (req, res) => {
+    res.send('Welcome to the dog');
+});
 
 // Start the server
 app.listen(port, () => {
