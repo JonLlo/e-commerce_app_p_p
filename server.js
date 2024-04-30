@@ -42,18 +42,29 @@ app.get('/users', async (req, res) => {
         <body>
             <h1>List of Users</h1>
             <ul>
-                ${users.map(user => `<li>Name: ${user.username}. Email: ${user.email}. Password: ${user.password}</li>`).join('')}
+                ${users.map(user => `<li>Name: ${user.username}. Email: ${user.email}. Password: ${user.password}. id = ${user.id}</li>`).join('')}
             </ul>
-            <form id="registrationform">
+        <form id="registrationform">
             <input type="submit" value="Add person">
-          </form>
-          
-          <script>
-            document.getElementById('registrationform').addEventListener('submit', function(event) {
-                event.preventDefault(); // Prevent the default form submission behavior
-                window.location.href = 'registration.html'; // Redirect to current URL + /users
-            });
-          </script>
+        </form>
+     
+        <form id="removalform">
+            <input type="submit" value = "Remove person"><br>
+        </form>
+
+        <script>
+        document.getElementById('removalform').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission behavior
+            window.location.href = 'removalform.html'; // Redirect to current URL + /users
+        });
+      </script>
+   
+        <script>
+          document.getElementById('registrationform').addEventListener('submit', function(event) {
+              event.preventDefault(); // Prevent the default form submission behavior
+              window.location.href = 'registration.html'; // Redirect to current URL + /users
+          });
+        </script>
         </body>
         </html>
     `);
@@ -120,7 +131,47 @@ app.post('/register', async (req, res) => {
  
 });
 
+app.delete('/users?user_name=:id', async (req, res) => {
+
+  
+  try {
+        await connectDatabase();
+        const userId = req.params.id; 
+        const userExistsQuery = 'SELECT * FROM "User" WHERE id = $1';
+        const { rowCount } = await client.query(userExistsQuery, [userId]);
+        if (rowCount === 0) {
+            return res.status(404).send(`User with ID ${userId} not found.`);
+        }
+
+        // If the user exists, delete the user from the database
+        const deleteQuery = 'DELETE FROM "User" WHERE id = $1';
+        await client.query(deleteQuery, [userId]);
+
+        const successMessage = `User with ID ${userId} removed successfully.`;
+
+        // Respond with a success message
+        res.status(200).send(successMessage);
+
+    } catch (error) {
+        console.error('Error removing user:', error);
+        res.status(500).send('Internal server error');
+    }
+
+
+
+  
+});
+
+
+
+
+
+
+
+
+
 // Start the server
 app.listen(port, () => {
     console.log(`Server is listening at http://localhost:${port}`);
 });
+
