@@ -1,5 +1,7 @@
 const express = require('express');
 const { connectDatabase, closeDatabase, client } = require('./config/database'); // Import database connection functions and client
+const bodyParser = require('body-parser');
+
 
 const app = express();
 const port = 3000; // You can change this port number if needed
@@ -36,24 +38,27 @@ app.get('/users', async (req, res) => {
     } 
 });
 //POST REQUEST FOR REGISTERING
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+    extended: true
+}))
 app.use(express.static('public'));
-app.use(express.json());
+
+
 
 
 app.post('/register', async (req, res) => {
     // Extract username, email, and password from the request body
-    const  {username, password, email}   = req.body;
-    console.log(username, "camea")
-
-});
-
+    console.log(req.body); // Log the entire req.body object
+    const  {user_name, pass_word, e_mail}   = req.body
+    console.log(user_name, pass_word, e_mail,"camea")
 
 
 
 
-    /*try {
+   try {
         // Validate input (e.g., check for required fields)
-        if (!username || !email || !password) {
+        if (!user_name || !e_mail || !pass_word) {
             return res.status(400).json({ error: 'Username, email, and password are required' });
         }
 
@@ -61,15 +66,14 @@ app.post('/register', async (req, res) => {
         // This is where you would typically interact with your database to store the user data
         
         // Respond with a success message
-        res.status(201).json({ message: 'User registered successfully' });
+        res.status(201).json({ message:
+             `User registered successfully. username: ${user_name}, email: ${e_mail}, password: ${pass_word}`,  });
     } catch (error) {
         console.error('Error registering user:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
-    */
-
-
-
+ 
+});
 
 // Start the server
 app.listen(port, () => {
