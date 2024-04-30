@@ -6,10 +6,11 @@ const bodyParser = require('body-parser');
 const app = express();
 const port = 3000; // You can change this port number if needed
 app.use(express.json());
+app.use(express.static('public'));
 
 // general routes
 app.get('/', (req, res) => {
-    res.send('Welcome');
+    res.sendFile(__dirname + '/public/home.html'); // Serve the HTML file
 });
 app.get('/dog', (req, res) => {
     res.send('Welcome to the dog');
@@ -30,12 +31,39 @@ app.get('/users', async (req, res) => {
 
         // Retrieve the users from the query result
         const users = result.rows;
-        res.json(users);
+        res.send(`
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Users</title>
+        </head>
+        <body>
+            <h1>List of Users</h1>
+            <ul>
+                ${users.map(user => `<li>Name: ${user.username}. Email: ${user.email}. Password: ${user.password}</li>`).join('')}
+            </ul>
+            <form id="registrationform">
+            <input type="submit" value="Add person">
+          </form>
+          
+          <script>
+            document.getElementById('registrationform').addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent the default form submission behavior
+                window.location.href = 'registration.html'; // Redirect to current URL + /users
+            });
+          </script>
+        </body>
+        </html>
+    `);
     } catch (error) {
         // Handle errors
         console.error('Error retrieving users:', error);
-        res.status(500).json({ error: 'Bloody Internal server error' });
-    } 
+        res.status(500).send(`Internal server error
+        <br>
+        <br>
+        <button onclick="window.location.href='/users'">Go to Users</button>`);} 
 });
 //POST REQUEST FOR REGISTERING
 app.use(bodyParser.json());
@@ -54,13 +82,14 @@ app.post('/register', async (req, res) => {
     console.log(user_name, pass_word, e_mail,"camea")
 
 
-
-
    try {
         // Validate input (e.g., check for required fields)
         if (!user_name || !e_mail || !pass_word) {
-            return res.status(400).json({ error: 'Username, email, and password are required' });
-        }
+            return res.status(400).send(`You need to put email, username and password in
+           <br>
+            <br>
+            <button onclick="window.location.href='/users'">Go to Users</button>`);} 
+    
 
         await connectDatabase();
 
@@ -68,16 +97,25 @@ app.post('/register', async (req, res) => {
         const insertQuery = 'INSERT INTO "User" (username, email, password) VALUES ($1, $2, $3)';
         await client.query(insertQuery, [user_name, e_mail, pass_word]);
 
+        const successMessage = `User registered successfully. username: ${user_name}, email: ${e_mail}, password: ${pass_word}`;
 
-        // Perform registration process (e.g., store user data in the database)
-        // This is where you would typically interact with your database to store the user data
-        
-        // Respond with a success message
-        res.status(201).json({ message:
-             `User registered successfully. username: ${user_name}, email: ${e_mail}, password: ${pass_word}`,  });
+        // Respond with a success message and button to redirect to /users
+        res.status(200).send(`
+            ${successMessage}
+            <br>
+            <br>
+            <button onclick="window.location.href='/users'">Go to Users</button>
+        `);
+
     } catch (error) {
         console.error('Error registering user:', error);
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).send(`Internal server error
+                    <br>
+            <br>
+            <button onclick="window.location.href='/users'">Go to Users</button>
+        
+        
+        `);
     }
  
 });
