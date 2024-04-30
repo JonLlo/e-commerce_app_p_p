@@ -62,6 +62,13 @@ app.post('/register', async (req, res) => {
             return res.status(400).json({ error: 'Username, email, and password are required' });
         }
 
+        await connectDatabase();
+
+        // Insert the user data into the database
+        const insertQuery = 'INSERT INTO "User" (username, email, password) VALUES ($1, $2, $3)';
+        await client.query(insertQuery, [user_name, e_mail, pass_word]);
+
+
         // Perform registration process (e.g., store user data in the database)
         // This is where you would typically interact with your database to store the user data
         
