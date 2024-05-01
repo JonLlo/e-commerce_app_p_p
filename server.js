@@ -12,9 +12,6 @@ app.use(express.static('public'));
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/home.html'); // Serve the HTML file
 });
-app.get('/dog', (req, res) => {
-    res.send('Welcome to the dog');
-});
 app.get('/', (req, res) => {
     res.send('Hello World!')
   })
