@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Removal</title>
+</head>
+<body>
+    <h1>User Removal Name</h1>
+    <form id="removalnameForm" method="POST">
+        <label for="usernamelabel">Username:</label>
+        <input type="text" id="usernamerem" name="user_namerem"><br>
+        <input type="submit" value="Remove">
+    </form>
+
+    <script>
+        document.getElementById('removalnameForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission behavior
+            const userName = document.getElementById('usernamerem').value;
+            window.location.href =`/removal/name/${userName}`; // Redirect to current URL + /users
+        });
+      </script>
+
+
+</body>
+</html>

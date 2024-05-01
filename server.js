@@ -48,6 +48,9 @@ app.get('/users', async (req, res) => {
                 <form id="removalbutton">
                     <input type="submit" value="see removal form">
                 </form>
+                <form id="removalnamebutton">
+                <input type="submit" value="see removal name form">
+            </form>
 
                 <script>
                     document.getElementById('registrationbutton').addEventListener('submit', function(event) {
@@ -58,6 +61,11 @@ app.get('/users', async (req, res) => {
                     document.getElementById('removalbutton').addEventListener('submit', function(event) {
                         event.preventDefault(); // Prevent the default form submission behavior
                         window.location.href = 'removalform.html'; // Redirect to current URL + /users
+                    });
+
+                    document.getElementById('removalnamebutton').addEventListener('submit', function(event) {
+                        event.preventDefault(); // Prevent the default form submission behavior
+                        window.location.href = 'removalnameform.html'; // Redirect to current URL + /users
                     });
                 </script>
             </body>
@@ -142,12 +150,12 @@ app.get('/removal/:id', async (req, res) => {
         const result = await client.query('SELECT * FROM "User" WHERE id = $1', [userId]);
         
         // Check if the query returned any rows (i.e., if the user ID exists)
-        if (result.rows.length > 100) {
+        if (result.rows.length > 0) {
             // User ID exists, proceed with deletion
             const deleteQuery = 'DELETE FROM "User" WHERE id = $1';
             await client.query(deleteQuery, [userId]);
 
-            const successMessage = `User with ID ${userId} removed verrrrrysuccessfully`;
+            const successMessage = `User with ID ${userId} removed very successfully`;
 
             // Respond with a success message and button to redirect to /users
             res.status(200).send(`
@@ -167,9 +175,66 @@ app.get('/removal/:id', async (req, res) => {
         }
     } catch (error) {
         console.error('Error removing user:', error);
-        res.status(500).send('Internal server error');
+        res.status(500).send(
+            
+            `Internal server error
+            <button onclick="window.location.href='/users'">Go to Users</button>
+            
+            `);
     }
 });
+
+app.get('/removal/name/:name', async (req, res) => {
+    const usernamebosh = req.params.name;
+    
+    try {
+        // Connect to the database
+        await connectDatabase();
+
+        // Query the database to check if the user ID exists
+        const result2 = await client.query('SELECT * FROM "User" WHERE username = $1', [usernamebosh]);
+        
+        // Check if the query returned any rows (i.e., if the user ID exists)
+        if (result2.rows.length > 0) {
+            // User ID exists, proceed with deletion
+            const deleteQuery2 = 'DELETE FROM "User" WHERE username = $1';
+            await client.query(deleteQuery2, [usernamebosh]);
+
+            const successMessage2 = `User with name ${usernamebosh} removed very successfully`;
+
+            // Respond with a success message and button to redirect to /users
+            res.status(200).send(`
+                ${successMessage2}
+                <br>
+                <br>
+                <button onclick="window.location.href='/users'">Go to Users</button>
+            `);
+        } else {
+            // User ID does not exist
+            res.status(200).send(`
+            No user has this name
+            <br>
+            <br>
+            <button onclick="window.location.href='/users'">Go to Users</button>
+        `);
+        }
+    } catch (error) {
+        console.error('Error removing user:', error);
+        res.status(500).send(
+            
+            `Internal server error
+            <button onclick="window.location.href='/users'">Go to Users</button>
+            
+            `);
+    }
+});
+
+
+
+
+
+
+
 
 
 
