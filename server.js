@@ -52,8 +52,6 @@ app.use(express.static('public'));
 
 
 app.post('/register', async (req, res) => {
-    // Extract username, email, and password from the request body
-    console.log(req.body); // Log the entire req.body object
 
    /*here*/
 });
