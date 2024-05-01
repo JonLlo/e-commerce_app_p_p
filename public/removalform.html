@@ -7,10 +7,20 @@
 </head>
 <body>
     <h1>User Removal</h1>
-    <form id="removalForm" action="/removal" method="POST">
+    <form id="removalForm" method="POST">
         <label for="userid">UserId:</label>
         <input type="text" id="userid" name="user_id"><br>
         <input type="submit" value="Remove">
     </form>
+
+    <script>
+        document.getElementById('removalForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission behavior
+            const userId = document.getElementById('userid').value;
+            window.location.href =`/removal/${userId}`; // Redirect to current URL + /users
+        });
+      </script>
+
+
 </body>
 </html>

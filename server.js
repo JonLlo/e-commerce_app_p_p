@@ -15,9 +15,6 @@ app.use(express.static('public'));
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/home.html'); // Serve the HTML file
 });
-app.get('/', (req, res) => {
-    res.send('Hello World!')
-  })
 
 //GET request route handler for all users:
 
@@ -133,19 +130,47 @@ app.post('/register', async (req, res) => {
 });
 
 
-app.post('/removal', async (req, res) => {
-    await connectDatabase();
-    console.log("hello");
-    res.status(200).send(`
-    ${successMessage}
-    <br>
-    <br>
-    <button onclick="window.location.href='/users'">Go to Users</button>
-`);
-
-
-})
+// POST request route handler
+app.get('/removal/:id', async (req, res) => {
+    const userId = req.params.id;
     
+    try {
+        // Connect to the database
+        await connectDatabase();
+
+        // Query the database to check if the user ID exists
+        const result = await client.query('SELECT * FROM "User" WHERE id = $1', [userId]);
+        
+        // Check if the query returned any rows (i.e., if the user ID exists)
+        if (result.rows.length > 100) {
+            // User ID exists, proceed with deletion
+            const deleteQuery = 'DELETE FROM "User" WHERE id = $1';
+            await client.query(deleteQuery, [userId]);
+
+            const successMessage = `User with ID ${userId} removed verrrrrysuccessfully`;
+
+            // Respond with a success message and button to redirect to /users
+            res.status(200).send(`
+                ${successMessage}
+                <br>
+                <br>
+                <button onclick="window.location.href='/users'">Go to Users</button>
+            `);
+        } else {
+            // User ID does not exist
+            res.status(200).send(`
+            This user does not exist
+            <br>
+            <br>
+            <button onclick="window.location.href='/users'">Go to Users</button>
+        `);
+        }
+    } catch (error) {
+        console.error('Error removing user:', error);
+        res.status(500).send('Internal server error');
+    }
+});
+
 
 
 app.listen(port, () => {
