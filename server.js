@@ -6,6 +6,8 @@ const bodyParser = require('body-parser');
 const app = express();
 const port = 3000; // You can change this port number if needed
 app.use(express.json());
+app.use(express.static('public'));
+
 
 
 
@@ -89,7 +91,45 @@ app.post('/register', async (req, res) => {
     // Extract username, email, and password from the request body
     console.log(req.body); // Log the entire req.body object
 
-   /*here*/
+    const  {user_name, pass_word, e_mail}   = req.body
+    console.log(user_name, pass_word, e_mail,"camea")
+
+
+   try {
+        // Validate input (e.g., check for required fields)
+        if (!user_name || !e_mail || !pass_word) {
+            return res.status(400).send(`You need to put email, username and password in
+           <br>
+            <br>
+            <button onclick="window.location.href='/users'">Go to Users</button>`);} 
+    
+
+        await connectDatabase();
+
+        // Insert the user data into the database
+        const insertQuery = 'INSERT INTO "User" (username, email, password) VALUES ($1, $2, $3)';
+        await client.query(insertQuery, [user_name, e_mail, pass_word]);
+
+        const successMessage = `User registered successfully. username: ${user_name}, email: ${e_mail}, password: ${pass_word}`;
+
+        // Respond with a success message and button to redirect to /users
+        res.status(200).send(`
+            ${successMessage}
+            <br>
+            <br>
+            <button onclick="window.location.href='/users'">Go to Users</button>
+        `);
+
+    } catch (error) {
+        console.error('Error registering user:', error);
+        res.status(500).send(`Internal server error
+                    <br>
+            <br>
+            <button onclick="window.location.href='/users'">Go to Users</button>
+        
+        
+        `);
+    }
 });
 
 
