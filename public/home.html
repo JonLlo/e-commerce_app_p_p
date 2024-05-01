@@ -7,12 +7,12 @@
 </head>
 <body>
   <h1>Welcome sir, click the below button to see all the people signed up!</h1>
-  <form id="usersform">
-    <input type="submit" value="People">
+  <form id="peoplebutton">
+    <input type="submit" value="See people">
   </form>
   
   <script>
-    document.getElementById('usersform').addEventListener('submit', function(event) {
+    document.getElementById('peoplebutton').addEventListener('submit', function(event) {
         event.preventDefault(); // Prevent the default form submission behavior
         window.location.href = window.location.href + 'users'; // Redirect to current URL + /users
     });

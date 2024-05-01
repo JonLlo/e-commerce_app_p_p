@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Registration</title>
+    <title>User Removal</title>
 </head>
 <body>
-    <h1>Which person do you wanna remove?</h1>
-    <form id="registrationForm" action="/remove" method="DELETE">
-        <label for="username">id</label>
-        <input type="text" id="username" name="user_name"><br>
+    <h1>User Removal</h1>
+    <form id="removalForm" action="/removal" method="POST">
+        <label for="userid">UserId:</label>
+        <input type="text" id="userid" name="user_id"><br>
+        <input type="submit" value="Remove">
     </form>
 </body>
 </html>
