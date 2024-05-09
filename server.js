@@ -100,7 +100,7 @@ app.use(bodyParser.urlencoded({
 
 
 
-
+///register
 app.post('/register', async (req, res) => {
     // Extract username, email, and password from the request body
     console.log(req.body); // Log the entire req.body object
@@ -145,6 +145,52 @@ app.post('/register', async (req, res) => {
         `);
     }
 });
+///login
+
+
+app.post('/login', async (req, res) => {
+    // Extract username, email, and password from the request body
+    const { user_name, pass_word, e_mail } = req.body;
+
+    try {
+        // Validate input (e.g., check for required fields)
+        if (!user_name || !e_mail || !pass_word) {
+            return res.status(400).send(`You need to provide email, username, and password.
+                <br><br>
+                <button onclick="window.location.href='/loginform.html'">Back to login form</button>
+                <button onclick="window.location.href='/users'">Back to users</button>
+                `);
+        }
+
+        await connectDatabase();
+
+        // Check if the user exists in the database
+        const checkQuery = 'SELECT id FROM "User" WHERE username = $1 AND email = $2 AND password = $3';
+        const { rows } = await client.query(checkQuery, [user_name, e_mail, pass_word]);
+
+        if (rows.length > 0) {
+            // User exists, send success response
+            res.status(200).send(`Login successful!
+            <button onclick="window.location.href='/successful.login.html'">secretcode</button>
+            
+            `);
+        } else {
+            // User does not exist or credentials are incorrect, send error response
+            res.status(401).send(`Invalid username, email, or password.
+                <br><br>
+                <button onclick="window.location.href='/loginform.html'">Back to login form</button>
+                <button onclick="window.location.href='/users'">Back to users</button>`
+                );
+                
+        }
+    } catch (error) {
+        console.error('Error logging in:', error);
+        res.status(500).send(`Internal server error.
+            <br><br>
+            <button onclick="window.location.href='/users'">Go to Users</button>`);
+    }
+});
+
 
 
 // POST request route handler
