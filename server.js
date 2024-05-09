@@ -38,7 +38,7 @@ app.get('/users', async (req, res) => {
                 <title>Users</title>
             </head>
             <body>
-                <h1>List of Users!</h1>
+                <h1>List of Users CHANGED NOW</h1>
                 <ul>
                     ${users.map(user => `<li>Name: ${user.username}. Email: ${user.email}. Password: ${user.password}. id = ${user.id}</li>`).join('')}
                 </ul>
@@ -49,8 +49,12 @@ app.get('/users', async (req, res) => {
                     <input type="submit" value="see removal form">
                 </form>
                 <form id="removalnamebutton">
-                <input type="submit" value="see removal name form">
-            </form>
+                    <input type="submit" value="see removal name form">
+                </form>
+                <form id="loginbutton">
+                    <input type="submit" value="see login form">
+                </form>
+                
 
                 <script>
                     document.getElementById('registrationbutton').addEventListener('submit', function(event) {
@@ -66,6 +70,11 @@ app.get('/users', async (req, res) => {
                     document.getElementById('removalnamebutton').addEventListener('submit', function(event) {
                         event.preventDefault(); // Prevent the default form submission behavior
                         window.location.href = 'removalnameform.html'; // Redirect to current URL + /users
+                    });
+
+                    document.getElementById('loginbutton').addEventListener('submit', function(event) {
+                        event.preventDefault(); // Prevent the default form submission behavior
+                        window.location.href = 'loginform.html'; // Redirect to current URL + /users
                     });
                 </script>
             </body>
