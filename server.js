@@ -115,7 +115,7 @@ app.post('/register', async (req, res) => {
         const insertQuery = 'INSERT INTO "User" (username, email, password) VALUES ($1, $2, $3)';
         await client.query(insertQuery, [user_name, e_mail, pass_word]);
 
-        const successMessage = `User registered successfully. username: ${user_name}, email: ${e_mail}, password: ${pass_word}`;
+        const successMessage = `User registered successfully! username: ${user_name}, email: ${e_mail}, password: ${pass_word}`;
 
         // Respond with a success message and button to redirect to /users
         res.status(200).send(`
