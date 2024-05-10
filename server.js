@@ -36,9 +36,10 @@ app.get('/users', async (req, res) => {
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>Users</title>
+                <link rel="stylesheet" href="styles.css">
             </head>
-            <body>
-                <h1>List of Users CHANGED NOW</h1>
+            <body className="custom-body">
+                <h1>List of Users!</h1>
                 <ul>
                     ${users.map(user => `<li>Name: ${user.username}. Email: ${user.email}. Password: ${user.password}. id = ${user.id}</li>`).join('')}
                 </ul>
@@ -147,7 +148,6 @@ app.post('/register', async (req, res) => {
 });
 ///login
 
-
 app.post('/login', async (req, res) => {
     // Extract username, email, and password from the request body
     const { user_name, pass_word, e_mail } = req.body;
@@ -190,8 +190,6 @@ app.post('/login', async (req, res) => {
             <button onclick="window.location.href='/users'">Go to Users</button>`);
     }
 });
-
-
 
 // POST request route handler
 app.get('/removal/:id', async (req, res) => {
@@ -284,15 +282,7 @@ app.get('/removal/name/:name', async (req, res) => {
     }
 });
 
-
-
-
-
-
-
-
-
-
+//app listen
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
   });

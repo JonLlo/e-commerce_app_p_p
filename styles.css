@@ -1,0 +1,5 @@
+.custom-body h1 {
+    background-color:blue; /* Example background color */
+    font-family: Arial, sans-serif; /* Example font family */
+    font-weight: bold;
+}
