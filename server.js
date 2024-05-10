@@ -39,7 +39,7 @@ app.get('/users', async (req, res) => {
                 <link rel="stylesheet" href="styles.css">
             </head>
             <body className="custom-body">
-                <h1>List of Users!</h1>
+                <h1>Users </h1>
                 <ul>
                     ${users.map(user => `<li>Name: ${user.username}. Email: ${user.email}. Password: ${user.password}. id = ${user.id}</li>`).join('')}
                 </ul>
